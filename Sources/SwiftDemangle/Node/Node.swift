@@ -13,7 +13,7 @@ public final class Node {
     
     private weak var parent: Node?
     
-    private(set) var kind: Kind
+    public private(set) var kind: Kind
     private(set) var payload: Payload
     private(set) var _children: [Node] {
         didSet {
@@ -22,6 +22,8 @@ public final class Node {
     }
     
     var copyOfChildren: [Node] { _children }
+
+    public var children: [Node] { copyOfChildren }
     
     fileprivate var numberOfParent: Int {
         var count = 0
@@ -222,7 +224,7 @@ public final class Node {
         kind == .Identifier && text == desired
     }
     
-    var text: String {
+    public var text: String {
         if case let .text(text) = self.payload {
             return text
         } else {
@@ -234,7 +236,7 @@ public final class Node {
         self.payload.isText
     }
     
-    var index: UInt64? {
+    public var index: UInt64? {
         switch self.payload {
         case let .index(index):
             return index
@@ -696,7 +698,7 @@ extension Node {
     
     var isClassType: Bool { kind == .Class }
     
-    var isAlias: Bool {
+    public var isAlias: Bool {
         switch self.kind {
         case .Type:
             return firstChild.isAlias
@@ -707,7 +709,7 @@ extension Node {
         }
     }
     
-    var isClass: Bool {
+    public var isClass: Bool {
         switch self.kind {
         case .Type:
             return firstChild.isClass
@@ -718,7 +720,7 @@ extension Node {
         }
     }
     
-    var isEnum: Bool {
+    public var isEnum: Bool {
         switch self.kind {
         case .Type:
             return firstChild.isEnum
@@ -729,7 +731,7 @@ extension Node {
         }
     }
     
-    var isProtocol: Bool {
+    public var isProtocol: Bool {
         switch self.kind {
         case .Type:
             return firstChild.isProtocol
@@ -740,7 +742,7 @@ extension Node {
         }
     }
     
-    var isStruct: Bool {
+    public var isStruct: Bool {
         switch self.kind {
         case .Type:
             return firstChild.isStruct
@@ -1593,15 +1595,15 @@ extension Node.Kind {
         .HasSymbolQuery,
     ]
     
-    var isDeclName: Bool {
+    public var isDeclName: Bool {
         Self.declNames.contains(self)
     }
     
-    var isAnyGeneric: Bool {
+    public var isAnyGeneric: Bool {
         Self.anyGenerics.contains(self)
     }
     
-    var isEntity: Bool {
+    public var isEntity: Bool {
         if self == .Type {
             return true
         } else {
@@ -1609,20 +1611,19 @@ extension Node.Kind {
         }
     }
     
-    var isRequirement: Bool {
+    public var isRequirement: Bool {
         Self.requirements.contains(self)
     }
     
-    
-    var isContext: Bool {
+    public var isContext: Bool {
         Self.contexts.contains(self)
     }
     
-    var isFunctionAttr: Bool {
+    public var isFunctionAttr: Bool {
         Self.functionAttrs.contains(self)
     }
     
-    var isMacroExpandion: Bool {
+    public var isMacroExpansion: Bool {
         switch self {
         case .AccessorAttachedMacroExpansion,
                 .MemberAttributeAttachedMacroExpansion,
